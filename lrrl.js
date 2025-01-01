@@ -1,6 +1,9 @@
 // Global Variables
 
 let clicked;
+let lCount = 0;
+let rCount = 0;
+let validButton = true 
 
 // Global End
 
@@ -39,13 +42,15 @@ lButton.addEventListener('click', () => {
     console.log('left click')
     clickMove();
     //clickShrink();
+    clickCount();
     return clicked
 })
 
 rButton.addEventListener('click', () => {
     clicked = document.querySelector('#rBtn')
     clickMove();
-   // clickShrink();
+    //clickShrink();
+    clickCount();
     console.log('right click')
     return clicked
 })
@@ -97,6 +102,33 @@ function clickShrink(button) {
             clicked.setAttribute("style", `width: ${rButtonWidth -10}px`)
             clicked.setAttribute("style", `height: ${rButtonHeight -10}px`)
         }
+}
+
+function clickCount (button) {
+    
+    if(clicked.textContent === 'Left')
+        {
+            lCount += 1
+            if(lCount > 2) {
+                console.log('Game Over')
+            }
+            if(rCount === 2) {
+                rCount = 0;
+            }
+        }
+        else if(clicked.textContent === 'Right') {
+            
+            rCount += 1
+            if(rCount > 2) {
+                console.log('Game Over')
+            }
+            if(lCount === 2) {
+                lCount = 0;
+            }
+        }
+
+    console.log(`left count ${lCount} right count ${rCount}`)
+
 }
 function Timer() {
 
