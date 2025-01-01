@@ -3,7 +3,8 @@
 let clicked;
 let lCount = 0;
 let rCount = 0;
-let validButton = true 
+let score = 0;
+let gameOver = false;
 
 // Global End
 
@@ -16,15 +17,27 @@ container.appendChild(backing)
 
 const leftButtonContainer = document.createElement('div')
 leftButtonContainer.className = 'lCont'
+
 const centreDiv = document.createElement('div')
 centreDiv.className = 'centreDiv'
 const centerTxt = document.createElement('h2')
 centerTxt.textContent = 'LRRL'
+const scoreTxt = document.createElement('h3')
+scoreTxt.textContent = `Score: ${score}`;
+//adjust position of game over text
+const gameOverTxt = document.createElement('h4')
+gameOverTxt.id = 'gameOverTxt'
+gameOverTxt.textContent = 'GAME OVER'
+
 const rightButtonContainer = document.createElement('div')
 rightButtonContainer.className = 'rCont'
 
 backing.appendChild(leftButtonContainer)
 backing.appendChild(centreDiv)
+
+
+centreDiv.appendChild(scoreTxt)
+centreDiv.appendChild(gameOverTxt)
 centreDiv.appendChild(centerTxt)
 backing.appendChild(rightButtonContainer)
 
@@ -36,6 +49,12 @@ const rButton = document.createElement('button')
 rButton.className = 'button'
 rButton.id = 'rBtn'
 rButton.textContent = 'Right'
+const newGameButton = document.createElement('button')
+newGameButton.className = 'button';
+newGameButton.id = 'newGameBtn'
+newGameButton.textContent = 'New Game'
+
+newGameButton.addEventListener('click', NewGame)
 
 lButton.addEventListener('click', () => {
     clicked = document.querySelector('#lBtn')
@@ -55,6 +74,7 @@ rButton.addEventListener('click', () => {
     return clicked
 })
 
+centreDiv.appendChild(newGameButton)
 leftButtonContainer.appendChild(lButton)
 rightButtonContainer.appendChild(rButton)
 
@@ -68,7 +88,6 @@ function clickMove(button)
     let Y = Math.floor(Math.random() * leftButtonContainer.clientHeight )
     let LX = Math.floor(Math.random() * leftButtonContainer.clientWidth )
     let RX = Math.floor(Math.random() * leftButtonContainer.clientWidth )
-    
     
     if(clicked.textContent === 'Left')
     {
@@ -106,11 +125,11 @@ function clickShrink(button) {
 
 function clickCount (button) {
     
-    if(clicked.textContent === 'Left')
-        {
+    if(clicked.textContent === 'Left') {   
+            
             lCount += 1
             if(lCount > 2) {
-                console.log('Game Over')
+                GameOver()
             }
             if(rCount === 2) {
                 rCount = 0;
@@ -119,26 +138,67 @@ function clickCount (button) {
         else if(clicked.textContent === 'Right') {
             
             rCount += 1
+            
             if(rCount > 2) {
-                console.log('Game Over')
+               GameOver()
             }
             if(lCount === 2) {
                 lCount = 0;
+               
             }
         }
 
     console.log(`left count ${lCount} right count ${rCount}`)
 
+    if(clicked.textContent === 'Left' && rCount != 0) {
+        console.log(`invalid button press`)
+        GameOver()
+    }
+    else if(clicked.textContent === 'Right' && lCount != 0) {
+        console.log(`invalid button press`)
+        GameOver()
+    }
+    Score()
+}
+
+function NewGame()
+{
+    document.querySelector('#gameOverTxt').hidden = true;
+    gameOver = false;
+    score = 0;
+    lCount= 0
+    rCount = 0
+    console.log("Game Start")
+    document.querySelector('#lBtn').disabled = false
+    lButton.setAttribute("style", `top: 10px; left: 10px`)
+    document.querySelector('#rBtn').disabled = false
+    rButton.setAttribute("style", `top: 10px; left: 10px`)
+    document.querySelector('#newGameBtn').hidden = true;
+    
+}
+
+function GameOver() {
+    gameOver = true;
+    console.log("GAME OVER")
+    document.querySelector('#newGameBtn').hidden = false;
+    document.querySelector('#gameOverTxt').hidden = false;
+    rButton.setAttribute('disabled', true)
+    lButton.setAttribute('disabled', true)
 }
 function Timer() {
 
 }
 
 function Score() {
-
+    if(!gameOver) {
+        console.log(score)
+        score +=1
+        scoreTxt.textContent = `Score: ${score}`
+    }
 }
 
 //Functions End
 
+NewGame();
 
 

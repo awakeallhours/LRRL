@@ -9,11 +9,7 @@
 
 game logic
 
-start with left
 
-increase button count with each click 
-
-if !round1 && button counter === 2 toggle valid press
 
 
 
